@@ -15,9 +15,9 @@ class App extends Component {
       }
     }*/
     //选出选中的select的option的值
-    let selFirstVal = document.getElementById("selfirst").options[document.getElementById("selfirst").selectedIndex].value;
+    let selFirstVal = parseInt(document.getElementById("selfirst").options[document.getElementById("selfirst").selectedIndex].value);
     // console.log(selFirstVal);
-    let selSecondVal = document.getElementById("selsecond").options[document.getElementById("selsecond").selectedIndex].value;
+    let selSecondVal = parseInt(document.getElementById("selsecond").options[document.getElementById("selsecond").selectedIndex].value);
 
     let num = parseInt(selSecondVal-selFirstVal);
     console.log(33,selSecondVal);
@@ -25,16 +25,32 @@ class App extends Component {
     console.log(33,num);
     //
     let chart = this.refs.chart.getChart();
+    // let arrdata = [];
     console.log(23333,chart);
     console.log(123333,chart.series);
     console.log(111,chart.series[0].data);
     for(var i=0,len=chart.series.length;i<len;i++){
-      console.log(99,chart.series[i]);
-      /*for(var j=0,len=chart.series[i].data.length;i<len;i++){
+      console.log(99,chart.series[i].data.slice(selFirstVal-1,selSecondVal));
+      chart.series[i].data = chart.series[i].data.slice(selFirstVal-1,selSecondVal);
+      // console.log(99,chart.series[i].data.slice(0,num));
+      // arrdata.push()
+      /*for(var j=0,len=chart.series[i].data.length;j<len;j++){
         console.log(88,chart.series[i].data[j]);
       }*/
      // datas2.push(datas[0].slice(0,num));
      }
+    for(var j=0,len=chart.series.length;j<len;j++){
+      // debugger
+      console.log(9090,chart.series[j].xAxis.categories.slice(selFirstVal-1,selSecondVal));
+      chart.series[j].xAxis.categories = chart.series[j].xAxis.categories.slice(selFirstVal-1,selSecondVal);
+    }
+    for(var k=0,len=chart.series.length;k<len;k++){
+      console.log(8989,chart.series[k].data.slice(selFirstVal-1,selSecondVal));
+      for(var m=0,lens=chart.series[k].data.slice(selFirstVal-1,selSecondVal);m<lens;m++){
+        console.log(9898,chart.series[k].data.slice(selFirstVal-1,selSecondVal)[m].y)
+      }
+      // chart.series[j].xAxis.categories = chart.series[j].xAxis.categories.slice(selFirstVal-1,selSecondVal);
+    }
     /*let datas = [];
     let datas2 = [];
     for(var i=0,len=chart.series[0].data.length;i<len;i++){
@@ -48,12 +64,11 @@ class App extends Component {
       // datas.push(chart.series[0].data.slice(0,num));
       // console.log(datas);
     }*/
+    console.log(66666,chart.series);
     //update更新数据date
-    /*chart.update({
-      series: [{
-        data: datas2
-      }]
-    })*/
+    chart.update({
+      series: chart.series
+    })
   }
   render() {
     return (
