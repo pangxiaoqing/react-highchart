@@ -4,76 +4,50 @@ import ReactHighmaps from 'react-highcharts/ReactHighmaps.src'
 import ReactHighstock from 'react-highcharts/ReactHighstock.src'
 import Highlight from 'react-highlight'
 import * as Config from './../data/data'
+import * as Point from './../data/more_data_y.json'
 
 
 class App extends Component {
   handleClick(){
-    /*let selFirst = this.refs.selfirst.childNodes;
-    for(var i=0,len=selFirst.length;i<len;i++){
-      if(selFirst[i].selected == true){
-        console.log(selFirst[i].innerHTML);
-      }
-    }*/
     //选出选中的select的option的值
     let selFirstVal = parseInt(document.getElementById("selfirst").options[document.getElementById("selfirst").selectedIndex].value);
-    // console.log(selFirstVal);
-    let selSecondVal = parseInt(document.getElementById("selsecond").options[document.getElementById("selsecond").selectedIndex].value);
+     // console.log(selFirstVal);
+     let selSecondVal = parseInt(document.getElementById("selsecond").options[document.getElementById("selsecond").selectedIndex].value);
 
-    let num = parseInt(selSecondVal-selFirstVal);
-    console.log(33,selSecondVal);
-    console.log(33,selFirstVal);
-    console.log(33,num);
-    //
-    let chart = this.refs.chart.getChart();
-    // let arrdata = [];
-    console.log(23333,chart);
-    console.log(123333,chart.series);
-    console.log(111,chart.series[0].data);
-    for(var i=0,len=chart.series.length;i<len;i++){
-      console.log(99,chart.series[i].data.slice(selFirstVal-1,selSecondVal));
-      chart.series[i].data = chart.series[i].data.slice(selFirstVal-1,selSecondVal);
-      // console.log(99,chart.series[i].data.slice(0,num));
-      // arrdata.push()
-      /*for(var j=0,len=chart.series[i].data.length;j<len;j++){
-        console.log(88,chart.series[i].data[j]);
-      }*/
-     // datas2.push(datas[0].slice(0,num));
-     }
-    for(var j=0,len=chart.series.length;j<len;j++){
-      // debugger
-      console.log(9090,chart.series[j].xAxis.categories.slice(selFirstVal-1,selSecondVal));
-      chart.series[j].xAxis.categories = chart.series[j].xAxis.categories.slice(selFirstVal-1,selSecondVal);
+     //选择月份区间的X轴显示
+    var new_xpoint = [];
+    console.log("X轴的月份： ",Point.xpoint.slice(selFirstVal-1,selSecondVal));
+    new_xpoint = Point.xpoint.slice(selFirstVal-1,selSecondVal);
+    console.log(999,new_xpoint);
+
+    //选择月份区间的Y轴显示
+    var new_ypoint = [];
+    for(var i=0,len=Point.ypoint.length;i<len;i++){
+      // Point.ypoint[i].data = Point.ypoint[i].data.slice(selFirstVal-1,selSecondVal)
+      new_ypoint.push({
+        "name":Point.ypoint[i].name,
+        "data":Point.ypoint[i].data.slice(selFirstVal-1,selSecondVal)
+      })
     }
-    for(var k=0,len=chart.series.length;k<len;k++){
-      console.log(8989,chart.series[k].data.slice(selFirstVal-1,selSecondVal));
-      for(var m=0,lens=chart.series[k].data.slice(selFirstVal-1,selSecondVal);m<lens;m++){
-        console.log(9898,chart.series[k].data.slice(selFirstVal-1,selSecondVal)[m].y)
-      }
-      // chart.series[j].xAxis.categories = chart.series[j].xAxis.categories.slice(selFirstVal-1,selSecondVal);
-    }
-    /*let datas = [];
-    let datas2 = [];
-    for(var i=0,len=chart.series[0].data.length;i<len;i++){
-      console.log(num);
-      console.log(222,chart.series[0].data);
-      datas.push(chart.series[0].data);
-      for(var i=0,len=datas.length;i<len;i++){
-        console.log(datas[0].slice(0,num));
-        datas2.push(datas[0].slice(0,num));
-      }
-      // datas.push(chart.series[0].data.slice(0,num));
-      // console.log(datas);
-    }*/
-    console.log(66666,chart.series);
+    console.log(1222222,new_ypoint);
+
+
     //update更新数据date
+    let chart = this.refs.chart.getChart();
     chart.update({
-      series: chart.series
-    })
+     series: new_ypoint
+     })
+    //更新X轴数据
+    chart.xAxis[0].setCategories(new_xpoint);
+    // console.log(134,chart);
+    // console.log(234,Config.more(new_xpoint,Point.ypoint));
+
   }
+
   render() {
     return (
       <div className="App">
-        <ReactHighcharts config={Config.more} ref="chart"/>
+        <ReactHighcharts config={Config.more(Point.xpoint,Point.ypoint)} ref="chart"/>
         <div>
           <select ref="selfirst" id="selfirst">
             <option value="1">一月</option>
